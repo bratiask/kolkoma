@@ -59,11 +59,34 @@
                 color: gray;
             }
 
-            .content {
+            .homepage-content {
                 flex: 1;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+            }
+
+            .about-content {
+                margin: 0 auto;
+                padding: 15px;
+                max-width: 700px;
+            }
+
+            .about-content h2 {
+                font-size: 24px;
+            }
+
+            .about-content p {
+                font-size: 18px;
+                line-height: 1.5;
+            }
+
+            a {
+                color: black;
+            }
+
+            a:hover {
+                color: rgba(0, 0, 0, 0.56);
             }
 
             h1 {
@@ -80,6 +103,7 @@
                 text-align: center;
                 padding: 10px;
                 color: gray;
+                background-color: white;
             }
 
             @media (max-width: 599px) {
@@ -97,6 +121,15 @@
                 h1 {
                     font-size: 72px;
                 }
+
+                .about-content h2 {
+                    font-size: 19px;
+                }
+
+                .about-content p {
+                    font-size: 15px;
+                    line-height: 1.5;
+                }
             }
         </style>
     </head>
@@ -109,11 +142,11 @@
                 {% block header %}{% endblock %}
             </div>
         </header>
-        <div class="content">
+        <div class="content {% block content_class %}{% endblock %}">
             {% block body %}{% endblock %}
         </div>
         <footer>
-            © 2022, Rampouch Dogs
+            © 2022, Rampouch Dogs | <a href="{{ path('about') }}">O projekte</a>
         </footer>
     </body>
 </html>
