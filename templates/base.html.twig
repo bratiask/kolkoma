@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="sk">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
@@ -12,8 +13,92 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;900&display=swap" rel="stylesheet">
+
+        <style>
+            html, body {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
+                position: relative;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            @media (min-width: 600px) {
+                header {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+
+            .location-and-time {
+                color: gray;
+            }
+
+            .content {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            h1 {
+                margin: 50px 0 200px 0;
+                font-size: 96px;
+                letter-spacing: -5px;
+            }
+
+            footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                padding: 10px;
+                color: gray;
+            }
+
+            @media (max-width: 599px) {
+                header {
+                    text-align: center;
+                }
+                .location-and-time {
+                    padding-top: 10px;
+                }
+
+                .time {
+                    display: block;
+                }
+
+                h1 {
+                    font-size: 72px;
+                }
+            }
+        </style>
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <div>
+                <strong>KOLKO</strong>MA
+            </div>
+            <div class="location-and-time">
+                {% block header %}{% endblock %}
+            </div>
+        </header>
+        <div class="content">
+            {% block body %}{% endblock %}
+        </div>
+        <footer>
+            © 2022, Rampouch Dogs
+        </footer>
     </body>
 </html>
