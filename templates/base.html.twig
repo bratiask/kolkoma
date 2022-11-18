@@ -17,11 +17,23 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;900&display=swap" rel="stylesheet">
-
         <style>
+            @font-face {
+                font-family: "Roboto";
+                font-weight: 300;
+                font-style: normal;
+                font-display: swap;
+                src: url("/fonts/Roboto-Light.ttf");
+            }
+
+            @font-face {
+                font-family: "Roboto";
+                font-weight: 900;
+                font-style: normal;
+                font-display: swap;
+                src: url("/fonts/Roboto-Black.ttf");
+            }
+
             html, body {
                 height: 100%;
                 display: flex;
