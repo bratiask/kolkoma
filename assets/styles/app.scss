@@ -1,20 +1,19 @@
 $lg-breakpoint: 700px;
 $md-breakpoint: 500px;
-
 @font-face {
-    font-family: "Roboto";
+    font-family: 'Roboto';
     font-weight: 300;
     font-style: normal;
     font-display: swap;
-    src: url("../fonts/Roboto-Light.ttf");
+    src: url('../fonts/Roboto-Light.ttf');
 }
 
 @font-face {
-    font-family: "Roboto";
+    font-family: 'Roboto';
     font-weight: 900;
     font-style: normal;
     font-display: swap;
-    src: url("../fonts/Roboto-Black.ttf");
+    src: url('../fonts/Roboto-Black.ttf');
 }
 
 html, body {
@@ -55,7 +54,7 @@ header {
 
 .about-content {
     margin: 0 auto;
-    padding: 15px;
+    padding: 15px 30px;
     max-width: 700px;
     width: 100%;
 }
@@ -64,9 +63,12 @@ header {
     font-size: 24px;
 }
 
-.about-content p {
-    font-size: 18px;
-    line-height: 1.5;
+.about-content {
+    caption,
+    p {
+        font-size: 18px;
+        line-height: 1.5;
+    }
 }
 
 a {
@@ -101,60 +103,98 @@ footer {
     .location-and-time {
         padding-top: 10px;
     }
-
     .time {
         display: block;
     }
-
     h1 {
         font-size: 72px;
     }
-
     .about-content h2 {
         font-size: 19px;
     }
-
-    .about-content p {
-        font-size: 16px;
-        line-height: 1.5;
+    .about-content {
+        caption,
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
     }
 }
 
 .charts-css.temperature-chart {
-    height: 330px;
-    --color: rgba(139,214,255,0.73);
+    height: 350px;
+    --color: rgba(139, 214, 255, 0.73);
     --secondary-axes-color: #e8e8e8;
     --labels-align: left;
 
-    @media (max-width: 700px) {
-        width: 95%;
-    }
-
-    caption {
-        color: gray;
-        font-size: 15px;
-        line-height: 1.25;
-    }
-}
-
-.show-data {
-    opacity: 0;
-
-    &.show-data-lg {
-        @media (min-width: $lg-breakpoint) {
-            opacity: 1;
+    &.show-heading {
+        caption {
+            height: auto;
+            margin-bottom: 40px;
+            text-align: left;
         }
     }
 
-    &.show-data-md {
-        @media (min-width: $md-breakpoint) and (max-width: $lg-breakpoint - 1px) {
-            opacity: 1;
+    .label {
+        font-weight: 300;
+        font-size: 12px;
+        white-space: nowrap;
+        padding-top: 3px;
+
+        .label-date {
+            font-size: 10px;
+            color: #a8a8a8;
         }
     }
 
-    &.show-data-sm {
-        @media (max-width: $md-breakpoint - 1px) {
-            opacity: 1;
+    &.show-data-on-hover {
+        .data {
+            font-size: 12px;
+            color: #207bab;
+            position: absolute;
+            white-space: nowrap;
+            top: -25px;
+            background-color: white;
+            border: 1px solid #aae1ff;
+            border-radius: 5px;
+            padding: 3px 6px;
+            z-index: 1000;
+        }
+
+        .show-data, .data {
+            opacity: 0;
+
+            &.show-data-lg {
+                @media (min-width: $lg-breakpoint) {
+                    opacity: 1;
+                }
+            }
+
+            &.show-data-md {
+                @media (min-width: $md-breakpoint) and (max-width: $lg-breakpoint - 1px) {
+                    opacity: 1;
+                }
+            }
+
+            &.show-data-sm {
+                @media (max-width: $md-breakpoint - 1px) {
+                    opacity: 1;
+                }
+            }
+        }
+
+        tr:hover {
+            td {
+                background-color: #44a6dc;
+            }
+
+            .data {
+                background-color: #44a6dc;
+                border-color: #44a6dc;
+                color: white;
+                z-index: 1001;
+                box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            }
         }
     }
 }
@@ -162,19 +202,19 @@ footer {
 .data-color {
     &.data-color-lg {
         @media (min-width: $lg-breakpoint) {
-            --color: rgba(139,214,255,1)
+            --color: rgba(139, 214, 255, 1)
         }
     }
 
     &.data-color-md {
         @media (min-width: $md-breakpoint) and (max-width: $lg-breakpoint - 1px) {
-            --color: rgba(139,214,255,1)
+            --color: rgba(139, 214, 255, 1)
         }
     }
 
     &.data-color-sm {
         @media (max-width: $md-breakpoint - 1px) {
-            --color: rgba(139,214,255,1)
+            --color: rgba(139, 214, 255, 1)
         }
     }
 }

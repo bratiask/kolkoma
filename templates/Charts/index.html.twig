@@ -7,9 +7,7 @@
         <a href="{{ path('homepage') }}">&lt; späť</a>
         <h2>Grafy</h2>
 
-        <p style="margin-bottom: 40px;">Graf teploty vody na Zlatých pieskoch za posledných 24 hodín (hodinové priemery)</p>
-
-        <table class="charts-css column hide-sdata show-labels data-spacing-1 show-33-secondary-axes temperature-chart">
+        <table class="charts-css column hide-sdata show-labels data-spacing-1 show-33-secondary-axes temperature-chart show-data-on-hover show-heading">
             <caption>Graf teploty vody na Zlatých pieskoch za posledných 24 hodín (hodinové priemery)</caption>
             <tbody>
                 {% for measurement in last_24h.measurements %}
@@ -20,17 +18,16 @@
                     {% set dataClass = (shownLg ? 'show-data-lg ' : '') ~ (shownMd ? 'show-data-md ' : '') ~ (shownXs ? 'show-data-sm ' : '') ~ 'show-data' %}
                     {% set dataColorClass = (shownLg ? 'data-color-lg ' : '') ~ (shownMd ? 'data-color-md ' : '') ~ (shownXs ? 'data-color-sm ' : '') ~ 'data-color' %}
                     <tr>
-                        <th class="{{ dataClass }}" scope="row" style="font-weight: 300; font-size: 12px; white-space: nowrap; padding-top: 3px;">
-                            <div>{{ measurement.measuredAt | date('G') }}<span style="">:00</span></div>
-                            <span style="font-size: 10px; color: #a8a8a8;">
-                                    {{ measurement.measuredAt | date('d.m.') }}
-                                </span>
+                        <th class="label {{ dataClass }}" scope="row">
+                            <div>{{ measurement.measuredAt | date('G') }}:00</div>
+                            <span class="label-date">
+                                {{ measurement.measuredAt | date('d.m.') }}
+                            </span>
                         </th>
                         <td class="{{ dataColorClass }}" style="--size: {{ (((measurement.compareValue - last_24h.min) / (last_24h.max - last_24h.min)) + 0.1) / 1.1 }};">
                             {% if measurement.value is not null %}
-                                <span class="data {{ dataClass }}" style="font-size: 12px; color: black; position: absolute; white-space: nowrap;
-                                    top: -25px; background-color: white; border: 1px solid rgba(139,214,255, 0.5); border-radius: 5px; padding: 3px 6px; z-index: 1000;">
-                                        {{ measurement.formattedValue(2) }} °C
+                                <span class="data {{ dataClass }}">
+                                    {{ measurement.formattedValue(2) }} °C
                                 </span>
                             {% endif %}
                         </td>
