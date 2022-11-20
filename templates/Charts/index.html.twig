@@ -5,37 +5,44 @@
 {% block body %}
     <div>
         <a href="{{ path('homepage') }}">&lt; späť</a>
-        <h2>Grafy</h2>
+        <h2>Grafy teploty vody, Zlaté Piesky, Bratislava</h2>
 
-        <table class="charts-css column hide-sdata show-labels data-spacing-1 show-33-secondary-axes temperature-chart show-data-on-hover show-heading">
-            <caption>Graf teploty vody na Zlatých pieskoch za posledných 24 hodín (hodinové priemery)</caption>
-            <tbody>
-                {% for measurement in last_24h.measurements %}
-                    {% set shownLg = ((loop.index0 is divisible by 3 or loop.last)) and loop.index0 != 22 %}
-                    {% set shownMd = ((loop.index0 is divisible by 4 or loop.last)) and loop.index0 != 22 %}
-                    {% set shownXs = ((loop.index0 is divisible by 6 or loop.last)) and loop.index0 != 22 %}
+        {% for chart in charts %}
+            <table class="charts-css column hide-sdata show-labels data-spacing-1 show-33-secondary-axes temperature-chart show-data-on-hover show-heading">
+                <caption>{{ chart.title }}</caption>
+                <tbody>
+                    {% set last_index = chart.measurements | length - 2 %}
+                    {% for measurement in chart.measurements %}
+                        {% set shownLg = ((loop.index0 is divisible by chart.breakpoints.lg or loop.last)) and (chart.breakpoints.lg == 1 or loop.index0 != last_index) %}
+                        {% set shownMd = ((loop.index0 is divisible by chart.breakpoints.md or loop.last)) and (chart.breakpoints.md == 1 or loop.index0 != last_index) %}
+                        {% set shownXs = ((loop.index0 is divisible by chart.breakpoints.xs or loop.last)) and (chart.breakpoints.xs == 1 or loop.index0 != last_index) %}
 
-                    {% set dataClass = (shownLg ? 'show-data-lg ' : '') ~ (shownMd ? 'show-data-md ' : '') ~ (shownXs ? 'show-data-sm ' : '') ~ 'show-data' %}
-                    {% set dataColorClass = (shownLg ? 'data-color-lg ' : '') ~ (shownMd ? 'data-color-md ' : '') ~ (shownXs ? 'data-color-sm ' : '') ~ 'data-color' %}
-                    <tr>
-                        <th class="label {{ dataClass }}" scope="row">
-                            <div>{{ measurement.measuredAt | date('G') }}:00</div>
-                            <span class="label-date">
-                                {{ measurement.measuredAt | date('d.m.') }}
-                            </span>
-                        </th>
-                        <td class="{{ dataColorClass }}" style="--size: {{ (((measurement.compareValue - last_24h.min) / (last_24h.max - last_24h.min)) + 0.1) / 1.1 }};">
-                            {% if measurement.value is not null %}
-                                <span class="data {{ dataClass }}">
-                                    {{ measurement.formattedValue(2) }} °C
+                        {% set dataClass = (shownLg ? 'show-data-lg ' : '') ~ (shownMd ? 'show-data-md ' : '') ~ (shownXs ? 'show-data-sm ' : '') ~ 'show-data' %}
+                        {% set dataColorClass = (shownLg ? 'data-color-lg ' : '') ~ (shownMd ? 'data-color-md ' : '') ~ (shownXs ? 'data-color-sm ' : '') ~ 'data-color' %}
+                        <tr>
+                            <th class="label {{ dataClass }}" scope="row">
+                                {% if chart.label_type == 'datetime' %}
+                                    <div>{{ measurement.measuredAt | date('G') }}:00</div>
+                                    <span class="label-date">
+                                        {{ measurement.measuredAt | date('d.m.') }}
+                                    </span>
+                                {% else %}
+                                    {{ measurement.measuredAt | date('d.m.') }}
+                                {% endif %}
+                            </th>
+                            <td class="{{ dataColorClass }}" style="--size: {{ (((measurement.compareValue(chart.decimal_places) - chart.min) / (chart.max - chart.min)) + 0.1) / 1.1 }};">
+                                {% if measurement.value is not null %}
+                                    <span class="data {{ dataClass }}">
+                                    {{ measurement.formattedValue(chart.decimal_places) }}
                                 </span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
 
-        <p style="margin-top: 40px;">Ďalšie grafy teploty vody na Zlatých pieskoch budeme pridávať postupne do konca roka 2022.</p>
+        <p style="margin-top: 40px;">Ďalšie grafy budeme pridávať postupne ako budú pribúdať dáta.</p>
     </div>
 {% endblock %}

@@ -77,9 +77,9 @@ class Measurement
         return $this;
     }
 
-    public function compareValue(): ?int
+    public function compareValue(int $decimalPlaces = 2): ?int
     {
-        return null === $this->value ? null : (int)round($this->value / 10);
+        return null === $this->value ? null : (int)round($this->value / pow(10, 3 - $decimalPlaces));
     }
 
     public function getFormattedValue(int $precision = 1): ?string
