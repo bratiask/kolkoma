@@ -121,13 +121,21 @@ footer {
 }
 
 .charts-css.temperature-chart {
-    height: 300px;
+    height: 330px;
     --color: rgba(139,214,255,0.73);
     --secondary-axes-color: #e8e8e8;
     --labels-align: left;
+    caption-side: bottom;
 
     @media (max-width: 700px) {
         width: 95%;
+    }
+
+    caption {
+        margin-top: 20px;
+        color: gray;
+        font-size: 15px;
+        line-height: 1.25;
     }
 }
 
