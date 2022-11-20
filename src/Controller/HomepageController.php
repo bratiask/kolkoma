@@ -14,7 +14,7 @@ class HomepageController extends AbstractController
     function index(MeasurementRepository $measurementRepository): Response
     {
         return $this->render('Homepage/index.html.twig', [
-            'last_measurement' => $measurementRepository->lastMeasurement(Measurement::LOCATION_BA_ZP)
+            'last_measurement' => $measurementRepository->last(Measurement::LOCATION_BA_ZP)
         ]);
     }
 }

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="sk">
     <head>
-        <script defer data-domain="kolkoma.sk" src="https://plausible.io/js/script.js"></script>
+        {% if app.environment == 'prod' %}
+            <script defer data-domain="kolkoma.sk" src="https://plausible.io/js/script.js"></script>
+        {% endif %}
 
         <meta charset="UTF-8">
         <title>{% block title %}Teplota vody, Zlaté piesky, Bratislava | KOLKOMA{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         <meta name="description" content="Aktuálna teplota vody v jazere Zlaté piesky v Bratislave.">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -18,124 +19,7 @@
         {% endblock %}
 
         <style>
-            @font-face {
-                font-family: "Roboto";
-                font-weight: 300;
-                font-style: normal;
-                font-display: swap;
-                src: url("/fonts/Roboto-Light.ttf");
-            }
 
-            @font-face {
-                font-family: "Roboto";
-                font-weight: 900;
-                font-style: normal;
-                font-display: swap;
-                src: url("/fonts/Roboto-Black.ttf");
-            }
-
-            html, body {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                margin: 0;
-                padding: 0;
-                position: relative;
-                font-family: 'Roboto', sans-serif;
-            }
-
-            html, * {
-                box-sizing: border-box;
-            }
-
-            header {
-                padding: 10px;
-            }
-
-            @media (min-width: 600px) {
-                header {
-                    display: flex;
-                    justify-content: space-between;
-                }
-            }
-
-            .location-and-time {
-                color: gray;
-            }
-
-            .homepage-content {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .about-content {
-                margin: 0 auto;
-                padding: 15px;
-                max-width: 700px;
-                width: 100%;
-            }
-
-            .about-content h2 {
-                font-size: 24px;
-            }
-
-            .about-content p {
-                font-size: 18px;
-                line-height: 1.5;
-            }
-
-            a {
-                color: black;
-            }
-
-            a:hover {
-                color: rgba(0, 0, 0, 0.56);
-            }
-
-            h1 {
-                margin: 50px 0 200px 0;
-                font-size: 96px;
-                letter-spacing: -5px;
-            }
-
-            footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                text-align: center;
-                padding: 10px;
-                color: gray;
-                background-color: white;
-            }
-
-            @media (max-width: 599px) {
-                header {
-                    text-align: center;
-                }
-                .location-and-time {
-                    padding-top: 10px;
-                }
-
-                .time {
-                    display: block;
-                }
-
-                h1 {
-                    font-size: 72px;
-                }
-
-                .about-content h2 {
-                    font-size: 19px;
-                }
-
-                .about-content p {
-                    font-size: 15px;
-                    line-height: 1.5;
-                }
-            }
         </style>
     </head>
     <body>

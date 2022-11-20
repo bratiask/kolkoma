@@ -7,6 +7,38 @@
         <a href="{{ path('homepage') }}">&lt; späť</a>
         <h2>Grafy</h2>
 
-        <p>Grafy teploty vody na Zlatých pieskoch plánujeme pridať do konca roka 2022.</p>
+        <p style="margin-bottom: 40px;">Graf teploty vody na Zlatých pieskoch za posledných 24 hodín (hodinové priemery)</p>
+
+        <table class="charts-css column hide-sdata show-labels data-spacing-1 show-33-secondary-axes temperature-chart">
+
+            <caption> Front End Developer Salary</caption>
+
+            <tbody>
+                {% for measurement in last_24h.measurements %}
+                    {% set shownLg = ((loop.index0 is divisible by 3 or loop.last)) and loop.index0 != 22 %}
+                    {% set shownMd = ((loop.index0 is divisible by 4 or loop.last)) and loop.index0 != 22 %}
+                    {% set shownXs = ((loop.index0 is divisible by 6 or loop.last)) and loop.index0 != 22 %}
+
+                    {% set dataClass = (shownLg ? 'show-data-lg ' : '') ~ (shownMd ? 'show-data-md ' : '') ~ (shownXs ? 'show-data-sm ' : '') ~ 'show-data' %}
+                    {% set dataColorClass = (shownLg ? 'data-color-lg ' : '') ~ (shownMd ? 'data-color-md ' : '') ~ (shownXs ? 'data-color-sm ' : '') ~ 'data-color' %}
+                    <tr>
+                        <th class="{{ dataClass }}" scope="row" style="font-weight: 300; font-size: 12px; white-space: nowrap; padding-top: 3px;">
+                            <div>{{ measurement.measuredAt | date('G') }}<span style="">:00</span></div>
+                            <span style="font-size: 10px; color: #a8a8a8;">
+                                    {{ measurement.measuredAt | date('d.m.') }}
+                                </span>
+                        </th>
+                        <td class="{{ dataColorClass }}" style="--size: {{ (((measurement.compareValue - last_24h.min) / (last_24h.max - last_24h.min)) + 0.2) / 1.2 }};">
+                                <span class="data {{ dataClass }}" style="font-size: 12px; color: black; position: absolute; white-space: nowrap;
+                                    top: -25px; background-color: white; border: 1px solid rgba(139,214,255, 0.5); border-radius: 5px; padding: 3px 6px; z-index: 1000;">
+                                        {{ measurement.formattedValue(1) }} °C
+                                    </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p style="margin-top: 40px;">Ďalšie grafy teploty vody na Zlatých pieskoch budeme pridávať postupne do konca roka 2022.</p>
     </div>
 {% endblock %}

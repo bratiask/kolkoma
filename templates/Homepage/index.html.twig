@@ -12,7 +12,7 @@
 
 {% block body %}
     <h1>
-        {% if last_measurement is null %}
+        {% if last_measurement is null or last_measurement.value is null %}
             -
         {% else %}
             {{ last_measurement.formattedValue }}<span style="color: silver; font-weight: 300; font-size: 32px; letter-spacing: 0;"> °C</span>

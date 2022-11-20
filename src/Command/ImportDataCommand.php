@@ -40,7 +40,6 @@ class ImportDataCommand extends Command
         OutputInterface $output
     ): int
     {
-        date_default_timezone_set('Europe/Bratislava');
         $measurements = [];
 
         do {

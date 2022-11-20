@@ -25,8 +25,8 @@ class Measurement
     #[Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $measuredAt;
 
-    #[Column(type: Types::INTEGER)]
-    private int $value;
+    #[Column(type: Types::INTEGER, nullable: true)]
+    private ?int $value = null;
 
     public function getId(): ?int
     {
@@ -66,18 +66,24 @@ class Measurement
         return $this;
     }
 
-    public function getValue(): int
+    public function getValue(): ?int
     {
         return $this->value;
     }
 
-    public function setValue(int $value): self
+    public function setValue(?int $value): self
     {
         $this->value = $value;
         return $this;
     }
 
-    public function getFormattedValue(): string {
-        return number_format(round($this->value / 1000, 1), 1, ',', '');
+    public function compareValue(): ?int
+    {
+        return null === $this->value ? null : (int)round($this->value / 10);
+    }
+
+    public function getFormattedValue(int $precision = 1): ?string
+    {
+        return null === $this->value ? null : preg_replace('/,0*$/', '', number_format(round($this->value / 1000, $precision), $precision, ',', ''));
     }
 }
