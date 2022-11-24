@@ -30,6 +30,12 @@ html, * {
     box-sizing: border-box;
 }
 
+h1 {
+    font-weight: 300;
+    font-size: 16px;
+    margin: 0;
+}
+
 header {
     padding: 10px;
 }
@@ -53,7 +59,7 @@ header {
 }
 
 .about-content {
-    margin: 0 auto;
+    margin: 0 auto 60px;
     padding: 15px 30px;
     max-width: 750px;
     width: 100%;
@@ -79,10 +85,11 @@ a:hover {
     color: rgba(0, 0, 0, 0.56);
 }
 
-h1 {
+h2.temperature {
     margin: 50px 0 200px 0;
     font-size: 96px;
     letter-spacing: -5px;
+    text-align: center;
 }
 
 footer {
@@ -106,7 +113,7 @@ footer {
     .time {
         display: block;
     }
-    h1 {
+    h2.temperature {
         font-size: 72px;
     }
     .about-content h2 {
@@ -119,6 +126,10 @@ footer {
             line-height: 1.5;
         }
     }
+}
+
+a.logo {
+    text-decoration: none;
 }
 
 .charts-css.temperature-chart {
@@ -142,21 +153,26 @@ footer {
         white-space: nowrap;
         padding-top: 3px;
 
-        .label-date {
-            font-size: 10px;
-            color: #a8a8a8;
+        .inner-label {
+            border: 1px solid white;
+
+            .label-date {
+                font-size: 10px;
+                color: #a8a8a8;
+            }
         }
     }
 
     &.show-data-on-hover {
         .data {
             font-size: 12px;
-            color: #207bab;
+            color: #0f6493;
+            font-weight: 900;
             position: absolute;
             white-space: nowrap;
             top: -25px;
             background-color: white;
-            border: 1px solid #aae1ff;
+            border: 1px solid #77b6d9;
             border-radius: 5px;
             padding: 3px 3px;
             z-index: 1000;
@@ -164,6 +180,7 @@ footer {
 
         .show-data, .data {
             opacity: 0;
+            transition-duration: 150ms;
 
             &.show-data-lg {
                 @media (min-width: $lg-breakpoint) {
@@ -184,15 +201,43 @@ footer {
             }
         }
 
+        tr:focus,
         tr:hover {
+            outline: none;
             td {
-                background-color: #44a6dc;
+                background-color: #0f6493;
+            }
+
+            .label {
+                opacity: 1;
+                z-index: 1005;
+
+                .inner-label {
+                    font-size: 16px;
+                    background-color: white;
+                    padding: 2px 5px;
+                    font-weight: 900;
+                    color: #0f6493;
+                    border: 1px solid #0f6493;
+                    border-radius: 5px;
+
+                    .label-date {
+                        font-size: 14px;
+                        color: #0f6493;
+                        font-weight: normal;
+                    }
+                }
             }
 
             .data {
-                background-color: #44a6dc;
-                border-color: #44a6dc;
-                color: white;
+                top: -30px;
+                font-size: 16px;
+                transition-duration: 150ms;
+                opacity: 1;
+                font-weight: 900;
+                background-color: white;
+                color: #0f6493;
+                border: 1px solid #0f6493;
                 z-index: 1001;
                 box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
             }

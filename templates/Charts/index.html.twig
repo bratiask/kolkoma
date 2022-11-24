@@ -8,6 +8,7 @@
         <h2>Grafy teploty vody, Zlaté Piesky, Bratislava</h2>
 
         {% for chart in charts %}
+            {% set chart_index = loop.index %}
             <table class="charts-css column hide-sdata show-labels data-spacing-1 show-33-secondary-axes temperature-chart show-data-on-hover show-heading">
                 <caption>{{ chart.title }}</caption>
                 <tbody>
@@ -19,16 +20,18 @@
 
                         {% set dataClass = (shownLg ? 'show-data-lg ' : '') ~ (shownMd ? 'show-data-md ' : '') ~ (shownXs ? 'show-data-sm ' : '') ~ 'show-data' %}
                         {% set dataColorClass = (shownLg ? 'data-color-lg ' : '') ~ (shownMd ? 'data-color-md ' : '') ~ (shownXs ? 'data-color-sm ' : '') ~ 'data-color' %}
-                        <tr>
+                        <tr tabindex="0">
                             <th class="label {{ dataClass }}" scope="row">
-                                {% if chart.label_type == 'datetime' %}
-                                    <div>{{ measurement.measuredAt | date('G') }}:00</div>
-                                    <span class="label-date">
+                                <div class="inner-label">
+                                    {% if chart.label_type == 'datetime' %}
+                                        <div>{{ measurement.measuredAt | date('G') }}:00</div>
+                                        <span class="label-date">
                                         {{ measurement.measuredAt | date('d.m.') }}
                                     </span>
-                                {% else %}
-                                    {{ measurement.measuredAt | date('d.m.') }}
-                                {% endif %}
+                                    {% else %}
+                                        {{ measurement.measuredAt | date('d.m.') }}
+                                    {% endif %}
+                                </div>
                             </th>
                             <td class="{{ dataColorClass }}" style="--size: {{ (((measurement.compareValue(chart.decimal_places) - chart.min) / (chart.max - chart.min)) + 0.1) / 1.1 }};">
                                 {% if measurement.value is not null %}

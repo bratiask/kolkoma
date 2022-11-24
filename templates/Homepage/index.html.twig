@@ -1,21 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}
-    {% if last_measurement is null %}
-        nikdy
-    {% else %}
-        voda v jazere Zlaté Piesky, Bratislava, <span class="time">{{ last_measurement.measuredAt | date('j.n. \\o H:i') }}</span>
-    {% endif %}
-{% endblock %}
-
 {% block content_class %}homepage-content{% endblock %}
 
 {% block body %}
-    <h1>
+    <h2 class="temperature">
         {% if last_measurement is null or last_measurement.value is null %}
             -
         {% else %}
-            {{ last_measurement.formattedValue }}<span style="color: silver; font-weight: 300; font-size: 32px; letter-spacing: 0;"> °C</span>
+            {{ last_measurement.value.formattedValue }}<span style="color: silver; font-weight: 300; font-size: 32px; letter-spacing: 0;"> °C</span>
         {% endif %}
-    </h1>
+    </h2>
 {% endblock %}

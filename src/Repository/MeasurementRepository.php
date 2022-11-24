@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -92,9 +90,14 @@ class MeasurementRepository extends ServiceEntityRepository
 
     /**
      * @param string $location
-     * @return Measurement[]
+     * @param int $days
+     * @return Measurement
+     * @throws \Exception
      */
-    public function last7DaysByDay(string $location): array
+    public function last7DaysByDay(
+        string $location,
+        int    $days
+    ): array
     {
         /** @var Measurement[] $measurements */
         $measurements = $this->createQueryBuilder('m')
@@ -102,7 +105,7 @@ class MeasurementRepository extends ServiceEntityRepository
             ->andWhere('m.measuredAt >= :miMeasuredAt')
             ->andWhere('m.measuredAt <= :maxMeasuredAt')
             ->setParameter('location', $location)
-            ->setParameter('miMeasuredAt', new DateTimeImmutable('7 days ago midnight'))
+            ->setParameter('miMeasuredAt', new DateTimeImmutable($days . ' days ago midnight'))
             ->setParameter('maxMeasuredAt', new DateTimeImmutable('today midnight'))
             ->getQuery()
             ->getResult();
@@ -126,7 +129,7 @@ class MeasurementRepository extends ServiceEntityRepository
         $now = new DateTimeImmutable('yesterday midnight');
         $result = [];
 
-        foreach (range(0, 6) as $diff) {
+        foreach (range(0, $days - 1) as $diff) {
             $time = $now->sub(new \DateInterval(sprintf('P%dD', $diff)));
             $hour = $time->format('d');
             $sum = $sums[$hour] ?? null;

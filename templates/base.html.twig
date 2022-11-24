@@ -25,10 +25,16 @@
     <body>
         <header>
             <div>
-                <strong>KOLKO</strong>MA
+                <a href="{{ path('homepage') }}" class="logo"><strong>KOLKO</strong>MA</a>
             </div>
             <div class="location-and-time">
-                {% block header %}{% endblock %}
+                {% block header %}
+                    {% if last_measurement is null %}
+                        nikdy
+                    {% else %}
+                        <h1>teplota vody, Zlaté Piesky, Bratislava, <span class="time">{{ last_measurement.value.measuredAt | date('j.n. \\o H:i') }}</span></h1>
+                    {% endif %}
+                {% endblock %}
             </div>
         </header>
         <div class="content {% block content_class %}{% endblock %}">

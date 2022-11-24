@@ -6,7 +6,6 @@ use App\Entity\Measurement;
 use App\Repository\MeasurementRepository;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -21,11 +20,10 @@ class ChartsController extends AbstractController
     }
 
     #[Route(path: 'grafy', name: 'charts')]
-    function index(
-        Request               $request,
-        MeasurementRepository $measurementRepository
-    ): Response
+    function index(MeasurementRepository $measurementRepository): Response
     {
+        $days = 7; //min(14, (new DateTimeImmutable('2022-11-16'))->diff(new DateTimeImmutable())->days);
+
         return $this->render('Charts/index.html.twig', [
             'charts' => [
                 $this->chartData(
@@ -37,17 +35,15 @@ class ChartsController extends AbstractController
                     ['lg' => 2, 'md' => 4, 'xs' => 6],
                     fn() => $measurementRepository->last24HoursByHour(Measurement::LOCATION_BA_ZP)
                 ),
-                ...(null === $request->query->get('d') ? [] : [
-                    $this->chartData(
-                        '7d',
-                        'Posledných 7 dní (denné priemery, °C)',
-                        'date',
-                        1,
-                        new DateTimeImmutable('tomorrow midnight 1 minute'),
-                        ['lg' => 1, 'md' => 1, 'xs' => 1],
-                        fn() => $measurementRepository->last7DaysByDay(Measurement::LOCATION_BA_ZP)
-                    )
-                ])
+                $this->chartData(
+                    '7d',
+                    sprintf('Posledných %d dní (denné priemery, °C)', $days),
+                    'date',
+                    1,
+                    new DateTimeImmutable('tomorrow midnight 1 minute'),
+                    ['lg' => 1, 'md' => 1, 'xs' => 1],
+                    fn() => $measurementRepository->last7DaysByDay(Measurement::LOCATION_BA_ZP, $days)
+                )
             ]
         ]);
     }
@@ -62,7 +58,7 @@ class ChartsController extends AbstractController
         callable          $getMeasurements
     ): array
     {
-        return $this->cache->get(sprintf('chart-datas-%s', $id), function (ItemInterface $item) use
+        return $this->cache->get(rand(1, 1000000) . sprintf('chart-data-%s', $id), function (ItemInterface $item) use
             (
                 $getMeasurements,
                 $decimalPlaces,
