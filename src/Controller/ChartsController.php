@@ -22,34 +22,37 @@ class ChartsController extends AbstractController
     #[Route(path: 'grafy', name: 'charts')]
     function index(MeasurementRepository $measurementRepository): Response
     {
-        $days = 7; //min(14, (new DateTimeImmutable('2022-11-16'))->diff(new DateTimeImmutable())->days);
+        $days = 29; //min(14, (new DateTimeImmutable('2022-11-16'))->diff(new DateTimeImmutable())->days);
 
         return $this->render('Charts/index.html.twig', [
             'charts' => [
                 $this->chartData(
+                    '14d',
+                    'column',
+                    sprintf('Posledných %d dní (denné priemery)', $days),
+                    'date',
+                    1,
+                    new DateTimeImmutable('tomorrow midnight 1 minute'),
+                    ['lg' => 2, 'md' => 3, 'xs' => 5],
+                    fn() => $measurementRepository->last7DaysByDay(Measurement::LOCATION_BA_ZP, $days)
+                ),
+                $this->chartData(
                     '24h',
-                    'Posledných 24 hodín (hodinové priemery, °C)',
+                    'column',
+                    'Posledných 24 hodín (hodinové priemery)',
                     'datetime',
                     2,
                     new DateTimeImmutable('1 minute'),
                     ['lg' => 2, 'md' => 4, 'xs' => 6],
                     fn() => $measurementRepository->last24HoursByHour(Measurement::LOCATION_BA_ZP)
                 ),
-                $this->chartData(
-                    '7d',
-                    sprintf('Posledných %d dní (denné priemery, °C)', $days),
-                    'date',
-                    1,
-                    new DateTimeImmutable('tomorrow midnight 1 minute'),
-                    ['lg' => 1, 'md' => 1, 'xs' => 1],
-                    fn() => $measurementRepository->last7DaysByDay(Measurement::LOCATION_BA_ZP, $days)
-                )
             ]
         ]);
     }
 
     private function chartData(
         string            $id,
+        string            $chartType,
         string            $title,
         string            $labelType,
         int               $decimalPlaces,
@@ -58,7 +61,7 @@ class ChartsController extends AbstractController
         callable          $getMeasurements
     ): array
     {
-        return $this->cache->get(rand(1, 1000000) . sprintf('chart-data-%s', $id), function (ItemInterface $item) use
+        return $this->cache->get(sprintf('chart-data-%s', $id), function (ItemInterface $item) use
             (
                 $getMeasurements,
                 $decimalPlaces,
@@ -66,22 +69,31 @@ class ChartsController extends AbstractController
             ) {
                 $item->expiresAt($expiresAt);
 
+                /** @var Measurement[] $measurements */
                 $measurements = $getMeasurements();
 
                 $max = -10000;
                 $min = 10000;
 
                 foreach ($measurements as $measurement) {
-                    $max = max($max, $measurement->compareValue($decimalPlaces));
-                    $min = min($min, $measurement->compareValue($decimalPlaces) ?? $min);
+                    $max = max($max, $measurement->getValue());
+                    $min = min($min, $measurement->getValue() ?? $min);
                 }
 
+                $step = ceil(($max - $min) / 1000) * 1000;
+
+                $yMax = ceil($max / $step) * $step;
+                $yMin = floor($min / $step) * $step;
+
                 return [
-                    'max' => $max,
-                    'min' => $min,
+                    'max' => $yMax,
+                    'min' => $yMin,
+                    'maxFormatted' => Measurement::formatTemperature($yMax, 1),
+                    'minFormatted' => Measurement::formatTemperature($yMin, 1),
                     'measurements' => $measurements,
                 ];
             }) + [
+                'chart_type' => $chartType,
                 'decimal_places' => $decimalPlaces,
                 'title' => $title,
                 'label_type' => $labelType,

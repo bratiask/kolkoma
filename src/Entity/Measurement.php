@@ -84,6 +84,14 @@ class Measurement
 
     public function getFormattedValue(int $precision = 1): ?string
     {
-        return null === $this->value ? null : preg_replace('/,0*$/', '', number_format(round($this->value / 1000, $precision), $precision, ',', ''));
+        return self::formatTemperature($this->value, $precision);
+    }
+
+    public static function formatTemperature(
+        ?float $value,
+        int    $precision = 0
+    ): ?string
+    {
+        return null === $value ? null : preg_replace('/,0*$/', '', number_format(round($value / 1000, $precision), $precision, ',', ''));
     }
 }

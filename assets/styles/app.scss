@@ -133,17 +133,47 @@ a.logo {
 }
 
 .charts-css.temperature-chart {
-    height: 300px;
+    height: 250px;
     --color: rgba(139, 214, 255, 0.73);
     --secondary-axes-color: #e8e8e8;
     --labels-align: left;
+    --primary-axis-color: #0f6493;
     margin-bottom: 60px;
+    position: relative;
+    padding-right: 15px;
+
+    tbody {
+        border-top: 1px solid rgba(139, 214, 255, 0.5);
+        border-top: 1px solid rgba(0, 0, 0, 0.5);
+    }
+
+    .y-axis-min {
+        position: absolute;
+        bottom: 15px;
+        right: -15px;
+        font-size: 13px;
+        display: block;
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    .y-axis-max {
+        position: absolute;
+        right: -20px;
+        transform: translateY(-9px);
+        font-size: 13px;
+        display: block;
+        color: rgba(0, 0, 0, 0.5);
+    }
 
     &.show-heading {
         caption {
             height: auto;
-            margin-bottom: 40px;
             text-align: left;
+
+            span.caption {
+                display: block;
+                padding-bottom: 5px;
+            }
         }
     }
 
@@ -172,7 +202,7 @@ a.logo {
             white-space: nowrap;
             top: -25px;
             background-color: white;
-            border: 1px solid #77b6d9;
+            border: 1px solid #acd1e5;
             border-radius: 5px;
             padding: 3px 3px;
             z-index: 1000;
