@@ -1,0 +1,126 @@
+{% apply inline_css %}
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        h1 {
+            font-size: 20px;
+        }
+
+        p {
+            margin: 0;
+            margin-bottom: 10px;
+            padding: 0;
+        }
+
+        #content {
+            background-color: #fff;
+            padding: 0;
+            width: 100%;
+        }
+
+        #message {
+            background-color: #fff;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        #info {
+            margin-top: 50px;
+            color: gray;
+            width: 100%;
+        }
+
+        #signature {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #signature p {
+            margin-top: 10px;
+        }
+
+        #code td {
+            -ms-word-break: break-all; /* Be VERY careful with this, breaks normal words wh_erever */
+            word-break: break-all; /* Non standard for webkit */
+            word-break: break-word;
+            -webkit-hyphens: auto;
+            -moz-hyphens: auto;
+            hyphens: auto;
+            font-family: courier, monospace;
+            font-size: 16px;
+            padding: 15px;
+            background-color: #efefef;
+        }
+    </style>
+
+    <center>
+        <table id="content">
+            <tr>
+                <td align="center">
+                    <table id="message">
+                        <tr>
+                            <td style="padding: 20px;">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                <strong>Ahoj. Ďakujeme za záujem!</strong><br><br>
+                                            </p>
+
+                                            <p>
+                                                Tvoj API kľúč je:
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="code">
+                                    <tr>
+                                        <td>
+                                            {{ user.apiKey }}
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="info">
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Tento jednoriadkový kľúč pošli v každom API HTTP requeste v hlavičke Authorization.
+                                            </p>
+                                            <p>
+                                                Dokumentáciu k API nájdeš tu:
+                                                {{ url('api_entrypoint') }}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="signature">
+                                    <tr>
+                                        <td>
+                                            <hr>
+                                            <p>
+                                                Prajem pekný deň,<br>
+                                                Filip z kolkoma.sk
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </center>
+{% endapply %}

@@ -22,12 +22,12 @@ class ChartsController extends AbstractController
     #[Route(path: 'grafy', name: 'charts')]
     function index(MeasurementRepository $measurementRepository): Response
     {
-        $days = 29; //min(14, (new DateTimeImmutable('2022-11-16'))->diff(new DateTimeImmutable())->days);
+        $days = 30; //min(14, (new DateTimeImmutable('2022-11-16'))->diff(new DateTimeImmutable())->days);
 
         return $this->render('Charts/index.html.twig', [
             'charts' => [
                 $this->chartData(
-                    '14d',
+                    '30d',
                     'column',
                     sprintf('Posledných %d dní (denné priemery)', $days),
                     'date',

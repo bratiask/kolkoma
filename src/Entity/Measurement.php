@@ -2,6 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Api\UrlGeneratorInterface;
+use ApiPlatform\Doctrine\Common\Filter\DateFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\MeasurementRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -10,8 +17,21 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Entity(repositoryClass: MeasurementRepository::class), UniqueConstraint(columns: ["location", "measured_at"])]
+#[ApiResource(
+    description: 'Temperature at given location and time',
+    operations: [
+        new GetCollection(openapiContext: ["summary" => "", "description" => "Retrieves the collection of temperature measurements (in Celsius degrees) for given date range."]),
+    ],
+    urlGenerationStrategy: UrlGeneratorInterface::ABS_URL,
+    normalizationContext: ['groups' => ['read']],
+    order: ['measuredAt' => 'DESC'],
+    paginationItemsPerPage: 240,
+    paginationPartial: true
+)]
+#[ApiFilter(DateFilter::class, properties: ['measuredAt' => DateFilterInterface::EXCLUDE_NULL])]
 class Measurement
 {
     const LOCATION_BA_ZP = 'BA.ZP';
@@ -19,9 +39,17 @@ class Measurement
     #[Column, GeneratedValue, Id]
     private ?int $id = null;
 
+    /**
+     * Only one code (BA.ZP) is supported for now.
+     */
+    #[Groups('read')]
     #[Column(type: Types::STRING)]
     private string $location;
 
+    /**
+     * Time of measurement.
+     */
+    #[Groups('read')]
     #[Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $measuredAt;
 
@@ -75,6 +103,15 @@ class Measurement
     {
         $this->value = $value;
         return $this;
+    }
+
+    /**
+     * Measurement value in Celsius degrees.
+     */
+    #[Groups('read')]
+    public function getTemperature(): ?float
+    {
+        return null === $this->value ? null : round($this->value / 1000, 2);
     }
 
     public function compareValue(int $decimalPlaces = 2): ?int

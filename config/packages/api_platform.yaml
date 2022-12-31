@@ -1,0 +1,36 @@
+api_platform:
+    version: '0.0.1'
+    title: 'KOLKOMA API'
+    description: 'Water temperature measurement API <p>
+    <a href="/register">Get API key</a></p>'
+    show_webby: false
+    #    oauth:
+    #        enabled: true
+    enable_swagger: true
+
+    # Enable Swagger UI.
+    enable_swagger_ui: true
+
+    # Enable ReDoc.
+    enable_re_doc: false
+
+    # Enable the entrypoint.
+    enable_entrypoint: true
+
+    # Enable the docs.
+    enable_docs: true
+
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+
+    formats:
+        json:
+            mime_types: [ 'application/json' ]
+        html:
+            mime_types: [ 'text/html' ]
+    defaults:
+        url_generation_strategy: !php/const ApiPlatform\Api\UrlGeneratorInterface::ABS_URL
+

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block content_class %}about-content{% endblock %}
+{% block title %}Získanie API kľúča | Aktuálna teplota vody, Zlaté piesky, Bratislava | kolkoma{% endblock %}
+
+{% block body %}
+    <a href="{{ path('homepage') }}">&lt; späť</a>
+
+    {% if form.vars.submitted and form.vars.valid %}
+        <h2>
+            Ďakujeme za záujem!
+        </h2>
+
+        <p>
+            API kľúč bol zaslaný na tvoju emailovú adresu.
+        </p>
+
+        <p>
+            Ak vytvoríš niečo zaujímavé budeme radi, keď nám dáš vedieť na ahoj@kolkoma.sk
+        </p>
+    {% else %}
+        <h2>
+            Získanie API kľúča
+        </h2>
+
+        <p>
+            Ak chceš získať API kľúč, zadaj svoju emailovú adresu a my ti ho zašleme.
+            Emailovú adresu použijeme len na zaslanie kľúča (JWT token s neobmedzenou platnosťou) a zaslanie informácií o prípadných spätne nekompatibilných zmenách v API v budúcnosti.
+        </p>
+        <div class="registration-form">
+            {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-dark">Požiadať o API kľúč</button>
+            {{ form_end(form) }}
+        </div>
+
+        <p class="mt-5">
+            <small><a href="{{ path('api_entrypoint') }}">Dokumentácia k API</a></small>
+        </p>
+    {% endif %}
+{% endblock %}

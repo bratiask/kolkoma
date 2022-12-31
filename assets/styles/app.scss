@@ -1,5 +1,8 @@
+@import '~bootstrap/scss/bootstrap';
+
 $lg-breakpoint: 700px;
 $md-breakpoint: 500px;
+
 @font-face {
     font-family: 'Roboto';
     font-weight: 300;
@@ -67,6 +70,9 @@ header {
 
 .about-content h2 {
     font-size: 24px;
+    font-weight: 900;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .about-content {
@@ -90,6 +96,7 @@ h2.temperature {
     font-size: 96px;
     letter-spacing: -5px;
     text-align: center;
+    font-weight: 900;
 }
 
 footer {
@@ -171,6 +178,7 @@ a.logo {
             text-align: left;
 
             span.caption {
+                color: black;
                 display: block;
                 padding-bottom: 5px;
             }
@@ -293,4 +301,8 @@ a.logo {
             --color: rgba(139, 214, 255, 1)
         }
     }
+}
+
+.registration-form {
+    max-width: 400px;
 }

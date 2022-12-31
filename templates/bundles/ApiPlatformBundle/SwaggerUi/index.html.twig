@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% if title %}{{ title }} - {% endif %}API Platform</title>
+
+        {% block stylesheet %}
+            <link rel="stylesheet" href="{{ asset('bundles/apiplatform/fonts/open-sans/400.css', assetPackage) }}">
+            <link rel="stylesheet" href="{{ asset('bundles/apiplatform/fonts/open-sans/700.css', assetPackage) }}">
+            <link rel="stylesheet" href="{{ asset('bundles/apiplatform/swagger-ui/swagger-ui.css', assetPackage) }}">
+            <link rel="stylesheet" href="{{ asset('bundles/apiplatform/style.css', assetPackage) }}">
+        {% endblock %}
+
+        {% set oauth_data = {'oauth': swagger_data.oauth|merge({'redirectUrl' : absolute_url(asset('bundles/apiplatform/swagger-ui/oauth2-redirect.html', assetPackage)) })} %}
+        {# json_encode(65) is for JSON_UNESCAPED_SLASHES|JSON_HEX_TAG to avoid JS XSS #}
+        <script id="swagger-data" type="application/json">{{ swagger_data|merge(oauth_data)|json_encode(65)|raw }}</script>
+
+        <style>
+            input[type="checkbox"] {
+                width: auto !important;
+            }
+
+            .opblock-summary-control {
+                padding-right: 10px !important;
+            }
+
+            #swagger-ui.api-platform .opblock-tag:hover {
+                background-color: white;
+                transform: none;
+                opacity: 0.7;
+            }
+
+            .top-bar {
+                background-color: #dedede;
+                margin-bottom: 20px;
+            }
+
+            .top-bar .container {
+                max-width: 1460px;
+                margin: 0 auto;
+                padding: 10px 50px;
+            }
+
+            .top-bar a {
+                color: #3b4151;
+                font-family: sans-serif;
+                font-size: 16px;
+                display: inline-block;
+                padding: 0 10px;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+
+    <body style="margin: 0; padding: 0; background-color: white;">
+        <div class="top-bar">
+            <div class="container">
+                <a href="{{ path('homepage') }}">&lt; späť na kolkoma.sk</a> |
+                <a href="{{ path('register') }}"><strong>Získať API kľúč</strong></a>
+            </div>
+        </div>
+        <div id="swagger-ui" class="api-platform"></div>
+
+        {% block javascript %}
+        {% if (reDocEnabled and not swaggerUiEnabled) or (reDocEnabled and 're_doc' == active_ui) %}
+            <script src="{{ asset('bundles/apiplatform/redoc/redoc.standalone.js', assetPackage) }}"></script>
+            <script src="{{ asset('bundles/apiplatform/init-redoc-ui.js', assetPackage) }}"></script>
+        {% else %}
+            <script src="{{ asset('bundles/apiplatform/swagger-ui/swagger-ui-bundle.js', assetPackage) }}"></script>
+            <script src="{{ asset('bundles/apiplatform/swagger-ui/swagger-ui-standalone-preset.js', assetPackage) }}"></script>
+            <script src="{{ asset('bundles/apiplatform/init-swagger-ui.js', assetPackage) }}"></script>
+        {% endif %}
+    {% endblock %}
+
+    </body>
+</html>
