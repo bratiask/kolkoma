@@ -61,7 +61,7 @@ class ChartsController extends AbstractController
         callable          $getMeasurements
     ): array
     {
-        return $this->cache->get(sprintf('chart-data-%s', $id), function (ItemInterface $item) use
+        return $this->cache->get(sprintf('chart-data-%s', $id) . rand(1, 100000) . rand(1, 100000), function (ItemInterface $item) use
             (
                 $getMeasurements,
                 $decimalPlaces,
@@ -80,7 +80,12 @@ class ChartsController extends AbstractController
                     $min = min($min, $measurement->getValue() ?? $min);
                 }
 
+                if ($min == $max) {
+                    $max = $min + 1000;
+                }
+
                 $step = ceil(($max - $min) / 1000) * 1000;
+                $step = max(1, $step);
 
                 $yMax = ceil($max / $step) * $step;
                 $yMin = floor($min / $step) * $step;
