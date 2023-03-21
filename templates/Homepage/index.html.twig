@@ -8,6 +8,13 @@
             -
         {% else %}
             {{ last_measurement.value.formattedValue }}<span style="color: silver; font-weight: 300; font-size: 32px; letter-spacing: 0;"> °C</span>
+            {% if last_measurement.outdated %}
+                <div class="outdated-temperature">
+                    Neaktuálna teplota. Pardon.&nbsp;:/<br>
+                    Zobrazená teplota bola nameraná <strong class="d-inline-block">{{ last_measurement.value.measuredAt | date('j. n. \\o H:i') }}</strong>.<br>
+                    Pracujeme na odstránení výpadku.
+                </div>
+            {% endif %}
         {% endif %}
     </h2>
 {% endblock %}

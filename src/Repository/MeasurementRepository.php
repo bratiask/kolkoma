@@ -107,13 +107,14 @@ class MeasurementRepository extends ServiceEntityRepository
             ->setParameter('location', $location)
             ->setParameter('miMeasuredAt', new DateTimeImmutable($days . ' days ago midnight'))
             ->setParameter('maxMeasuredAt', new DateTimeImmutable('today midnight'))
+            ->orderBy('m.measuredAt')
             ->getQuery()
             ->getResult();
 
         $sums = [];
 
         foreach ($measurements as $measurement) {
-            $hour = $measurement->getMeasuredAt()->format('d');
+            $hour = $measurement->getMeasuredAt()->format('m-d');
 
             if (!isset($sums[$hour])) {
                 $sums[$hour] = [
@@ -131,7 +132,7 @@ class MeasurementRepository extends ServiceEntityRepository
 
         foreach (range(0, $days - 1) as $diff) {
             $time = $now->sub(new \DateInterval(sprintf('P%dD', $diff)));
-            $hour = $time->format('d');
+            $hour = $time->format('m-d');
             $sum = $sums[$hour] ?? null;
 
             $result[$hour] = (new Measurement())

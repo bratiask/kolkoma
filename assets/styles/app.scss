@@ -97,6 +97,14 @@ h2.temperature {
     letter-spacing: -5px;
     text-align: center;
     font-weight: 900;
+
+    .outdated-temperature {
+        font-size: 16px;
+        letter-spacing: 0;
+        font-weight: 400;
+        color: #e0370f;
+        padding: 20px;
+    }
 }
 
 footer {

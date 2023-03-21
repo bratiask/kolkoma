@@ -24,29 +24,41 @@ class ChartsController extends AbstractController
     {
         $days = 30; //min(14, (new DateTimeImmutable('2022-11-16'))->diff(new DateTimeImmutable())->days);
 
+        $charts = [
+            $this->chartData(
+                '30d',
+                'column',
+                sprintf('Posledných %d dní (denné priemery)', $days),
+                'date',
+                1,
+                new DateTimeImmutable('tomorrow midnight 1 minute'),
+                ['lg' => 2, 'md' => 3, 'xs' => 5],
+                fn() => $measurementRepository->last7DaysByDay(Measurement::LOCATION_BA_ZP, $days)
+            )
+        ];
+
+        $averages24Hours = $measurementRepository->last24HoursByHour(Measurement::LOCATION_BA_ZP);
+        $show24Hours = false;
+
+        foreach ($averages24Hours as $average) {
+            $show24Hours = $show24Hours || null !== $average->getValue();
+        }
+
+        if ($show24Hours) {
+            $charts[] = $this->chartData(
+                '24h',
+                'column',
+                'Posledných 24 hodín (hodinové priemery)',
+                'datetime',
+                2,
+                new DateTimeImmutable('1 minute'),
+                ['lg' => 2, 'md' => 4, 'xs' => 6],
+                fn() => $measurementRepository->last24HoursByHour(Measurement::LOCATION_BA_ZP)
+            );
+        }
+
         return $this->render('Charts/index.html.twig', [
-            'charts' => [
-                $this->chartData(
-                    '30d',
-                    'column',
-                    sprintf('Posledných %d dní (denné priemery)', $days),
-                    'date',
-                    1,
-                    new DateTimeImmutable('tomorrow midnight 1 minute'),
-                    ['lg' => 2, 'md' => 3, 'xs' => 5],
-                    fn() => $measurementRepository->last7DaysByDay(Measurement::LOCATION_BA_ZP, $days)
-                ),
-                $this->chartData(
-                    '24h',
-                    'column',
-                    'Posledných 24 hodín (hodinové priemery)',
-                    'datetime',
-                    2,
-                    new DateTimeImmutable('1 minute'),
-                    ['lg' => 2, 'md' => 4, 'xs' => 6],
-                    fn() => $measurementRepository->last24HoursByHour(Measurement::LOCATION_BA_ZP)
-                ),
-            ]
+            'charts' => $charts
         ]);
     }
 
