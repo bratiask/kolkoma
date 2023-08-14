@@ -17,6 +17,9 @@ DirectoryIndex index.php
     Options -MultiViews
 </IfModule>
 
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
